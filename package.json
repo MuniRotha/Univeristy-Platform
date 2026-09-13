@@ -1,0 +1,13 @@
+{
+  "name": "university-identity-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Central Identity and User Management Platform - microservices root helper",
+  "scripts": {
+    "install:all": "cd api-gateway && npm install && cd ../registration-service && npm install && cd ../login-service && npm install && cd ../admin-service && npm install && cd ../user-service && npm install",
+    "dev": "concurrently -n GATEWAY,REGISTER,LOGIN,ADMIN,USER -c blue,green,yellow,magenta,cyan \"npm --prefix api-gateway start\" \"npm --prefix registration-service start\" \"npm --prefix login-service start\" \"npm --prefix admin-service start\" \"npm --prefix user-service start\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

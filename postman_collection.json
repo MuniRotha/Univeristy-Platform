@@ -1,0 +1,180 @@
+{
+  "info": {
+    "name": "University Identity Platform",
+    "description": "All requests go through the API Gateway on http://localhost:3000 only.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:3000" },
+    { "key": "user_token", "value": "" },
+    { "key": "admin_token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Task 5 - Register User",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Alice Student\",\n  \"email\": \"alice@university.edu\",\n  \"password\": \"Passw0rd!\",\n  \"role\": \"user\",\n  \"phone\": \"9999999999\"\n}"
+        },
+        "url": "{{base_url}}/register/userregister"
+      }
+    },
+    {
+      "name": "Task 5 - Register Admin",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Bob Admin\",\n  \"email\": \"bob@university.edu\",\n  \"password\": \"AdminPass1!\",\n  \"role\": \"admin\",\n  \"phone\": \"8888888888\"\n}"
+        },
+        "url": "{{base_url}}/register/userregister"
+      }
+    },
+    {
+      "name": "Task 5 - Register Duplicate Email (expect 409)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Alice Student\",\n  \"email\": \"alice@university.edu\",\n  \"password\": \"Passw0rd!\",\n  \"role\": \"user\"\n}"
+        },
+        "url": "{{base_url}}/register/userregister"
+      }
+    },
+    {
+      "name": "Task 6 - Login User",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"alice@university.edu\",\n  \"password\": \"Passw0rd!\",\n  \"role\": \"user\"\n}"
+        },
+        "url": "{{base_url}}/auth/login"
+      }
+    },
+    {
+      "name": "Task 6 - Login Admin",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"bob@university.edu\",\n  \"password\": \"AdminPass1!\",\n  \"role\": \"admin\"\n}"
+        },
+        "url": "{{base_url}}/auth/login"
+      }
+    },
+    {
+      "name": "Task 6 - Login Wrong Password (expect 401)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"alice@university.edu\",\n  \"password\": \"wrongpass\",\n  \"role\": \"user\"\n}"
+        },
+        "url": "{{base_url}}/auth/login"
+      }
+    },
+    {
+      "name": "Task 8 - Admin Search User (found)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+        "url": "{{base_url}}/admin/searchuser?query=alice"
+      }
+    },
+    {
+      "name": "Task 8 - Admin Search User (not found)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+        "url": "{{base_url}}/admin/searchuser?query=doesnotexist"
+      }
+    },
+    {
+      "name": "Task 8 - Admin View All Users",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+        "url": "{{base_url}}/admin/viewalluser"
+      }
+    },
+    {
+      "name": "Task 8 - Admin Delete User",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"alice@university.edu\"\n}"
+        },
+        "url": "{{base_url}}/admin/deluser"
+      }
+    },
+    {
+      "name": "Task 9 - User View Profile",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{user_token}}" }],
+        "url": "{{base_url}}/user/viewprofile"
+      }
+    },
+    {
+      "name": "Task 9 - User Update Profile",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{user_token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Alice A. Student\",\n  \"phone\": \"7777777777\"\n}"
+        },
+        "url": "{{base_url}}/user/updateprofile"
+      }
+    },
+    {
+      "name": "Task 10a - No Token (expect 401)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/admin/viewalluser"
+      }
+    },
+    {
+      "name": "Task 10b - Wrong/Invalid Token (expect 401)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer this.is.not.a.valid.token" }],
+        "url": "{{base_url}}/admin/viewalluser"
+      }
+    },
+    {
+      "name": "Task 10c - Admin Token on User API (expect 403)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+        "url": "{{base_url}}/user/viewprofile"
+      }
+    },
+    {
+      "name": "Task 10d - User Token on Admin API (expect 403)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{user_token}}" }],
+        "url": "{{base_url}}/admin/viewalluser"
+      }
+    }
+  ]
+}
