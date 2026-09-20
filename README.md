@@ -196,3 +196,16 @@ university-platform/
 ├── package.json           # root helper (concurrently)
 └── .gitignore
 ```
+## Live Deployment (AWS EC2)
+
+This platform is deployed across 3 AWS EC2 instances:
+
+| Instance | Runs | Public IP |
+|---|---|---|
+| EC2 #1 | API Gateway (3000), Registration (4001, internal), Login (4002, internal) | `3.94.107.116` |
+| EC2 #2 | Admin Service (4003) | `54.243.5.245` |
+| EC2 #3 | User Service (4004) | `13.219.92.254` |
+
+**Entry point for all client requests:** `http://3.94.107.116:3000`
+
+Registration and Login stay internal (reachable only via `localhost` on EC2 #1); Admin and User are only reachable through the Gateway, which enforces JWT and role validation before proxying — clients never call them directly, matching the architecture's single-entry-point requirement.
